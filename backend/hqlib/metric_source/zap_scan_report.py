@@ -18,6 +18,7 @@ limitations under the License.
 import functools
 import logging
 import traceback
+import hashlib
 
 import bs4
 
@@ -67,11 +68,39 @@ class ZAPScanReport(domain.MetricSource):
         warnings = []
         headers = soup.find_all('tr', attrs={"class": "risk-{level}".format(level=risk_level)})
         for header in headers:
+            table = header.findParent('table')
             name = header.find_all('th')[1].string
-            description = header.find_next_sibling().find_all('td')[1]
-            while description.string is None:
-                description = description.contents[0]
-            warnings.append((name, description.string))
+            description = header.find_next_sibling().find_all('td')[1].get_text()
+            #print("Issue name: " + name + " - description: " + description)
+
+            locations = table.find_all('td', attrs={"class": "indent1"})
+            for location in locations:
+                url = location.find_next_sibling().get_text()
+                #print("Issue: " + name + " (" + description + ") @ " + url)
+                property_hash = ""
+
+                for location_property in location.parent.find_next_siblings('tr'):
+                    property_title = location_property.find('td', attrs={"class": "indent2"})
+                    if property_title is not None:
+                        property_name = property_title.get_text()
+                        property_value = property_title.find_next_sibling().get_text()
+                        #print("property_name: " + property_name + " - property_value: " + property_value)
+                        property_hash += property_name + property_value
+                    else:
+                        break
+
+                warning_hash_value = (name + url + property_hash)
+                #print("warning_hash_value: " + warning_hash_value)
+                warning_hash_value = warning_hash_value.encode('utf-8')
+
+                md5_hash = hashlib.md5()
+                md5_hash.update(warning_hash_value)
+                warning_id = md5_hash.hexdigest()
+                warnings.append((name, description, url, warning_id))
+
+        for warning in warnings:
+            print("Warning: [" + warning[3] + "] " + warning[0][:10] + " (" + warning[1][:10] + ") @ " + warning[2])
+
         if not warnings:
             logging.warning("Couldn't find any entries with %s risk level.", risk_level)
         return warnings

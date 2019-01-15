@@ -29,7 +29,9 @@ class ZAPScanAlertsMetric(AlertsMetric):
 
     extra_info_headers = {
         "title": "Waarschuwing",
-        "description": "Omschrijving"
+        "description": "Omschrijving",
+        "url": "Url",
+        "warning_id": "False-positive"
     }
 
     def extra_info_rows(self) -> list:
