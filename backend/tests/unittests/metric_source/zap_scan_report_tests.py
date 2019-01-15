@@ -82,7 +82,7 @@ class ZAPScanReportTest(unittest.TestCase):
             description="<div><p>The First Part</p><span>of a very long description</span></div>"
         )
         result = self.__report.get_warnings_info('high', 'url')
-        self.assertEqual([("Warning Name", "The First Part")], result)
+        self.assertEqual([("Warning Name", "The First Part", "Warning location", "Warning ID")], result)
 
     def test_get_warnings_info_http_error(self, mock_url_read):
         """ Test that data about warnings are empty when http error happens. """
