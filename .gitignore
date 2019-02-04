@@ -24,3 +24,4 @@ backend/.venv
 
 # Ignore OS specific folders and files
 .DS_Store
+fp-api/data.json
