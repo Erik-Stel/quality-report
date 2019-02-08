@@ -16,13 +16,15 @@ limitations under the License.
 
 
 from hqlib.typing import MetricParameters
-from ..metric_source_mixin import BirtTestDesignMetric
 from ...domain import LowerIsBetterMetric
+from ...metric_source import Birt
 
 
-class UserStoryMetric(BirtTestDesignMetric, LowerIsBetterMetric):
+class UserStoryMetric(LowerIsBetterMetric):
     """ Base class for metrics measuring the quality of user stories. """
     unit = 'user stories'
+
+    metric_source_class = Birt
 
     def value(self):
         nr_user_stories, nr_user_stories_ok = self._nr_user_stories(), self._nr_user_stories_ok()

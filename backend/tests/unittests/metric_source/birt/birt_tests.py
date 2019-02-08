@@ -66,6 +66,11 @@ class BirtTest(unittest.TestCase):
         self.assertEqual('http://birt/birt/preview?__report=reports/whats_missing.rptdesign',
                          self.__birt.whats_missing_url())
 
+    def test_metric_source_urls(self):
+        """ Test the what's missing report url. """
+        self.assertEqual(['http://birt/birt/preview?__report=reports/whats_missing.rptdesign'],
+                         self.__birt.metric_source_urls())
+
     def test_manual_test_url_trunk(self):
         """ Test the manual test execution url for the trunk. """
         self.assertEqual(

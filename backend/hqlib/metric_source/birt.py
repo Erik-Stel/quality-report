@@ -56,6 +56,10 @@ class Birt(domain.MetricSource, beautifulsoup.BeautifulSoupOpener):
         """ Return the What's missing report url for the product. """
         return self.__whats_missing_url
 
+    def metric_source_urls(self, *metric_source_ids: str) -> List[str]:
+        """ Return the What's missing report url for the product. """
+        return [self.__whats_missing_url]
+
     # Metrics calculated from other metrics:
 
     def nr_user_stories_with_sufficient_ltcs(self) -> int:
