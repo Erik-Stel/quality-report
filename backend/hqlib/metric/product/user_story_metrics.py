@@ -17,14 +17,14 @@ limitations under the License.
 
 from hqlib.typing import MetricParameters
 from ...domain import LowerIsBetterMetric
-from ...metric_source import Birt
+from ...metric_source.abstract.backlog import Backlog
 
 
 class UserStoryMetric(LowerIsBetterMetric):
     """ Base class for metrics measuring the quality of user stories. """
     unit = 'user stories'
 
-    metric_source_class = Birt
+    metric_source_class = Backlog
 
     def value(self):
         nr_user_stories, nr_user_stories_ok = self._nr_user_stories(), self._nr_user_stories_ok()

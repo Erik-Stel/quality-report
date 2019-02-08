@@ -21,10 +21,11 @@ from typing import List
 
 from hqlib.typing import DateTime
 from . import beautifulsoup, url_opener
-from .. import utils, domain
+from .. import utils
+from .abstract.backlog import Backlog
 
 
-class Birt(domain.MetricSource):
+class Birt(Backlog):
     """ Class representing the Birt report engine instance. """
 
     metric_source_name = 'Birt reports'
