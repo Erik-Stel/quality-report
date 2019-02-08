@@ -24,7 +24,7 @@ from . import beautifulsoup, url_opener
 from .. import utils, domain
 
 
-class Birt(domain.MetricSource, beautifulsoup.BeautifulSoupOpener):
+class Birt(domain.MetricSource):
     """ Class representing the Birt report engine instance. """
 
     metric_source_name = 'Birt reports'
@@ -155,7 +155,7 @@ class Birt(domain.MetricSource, beautifulsoup.BeautifulSoupOpener):
         """ Return the manual test cases. """
         url = self.__manual_test_execution_url.format(ver=version)
         try:
-            soup = self.soup(url)
+            soup = beautifulsoup.BeautifulSoupOpener().soup(url)
         except url_opener.UrlOpener.url_open_exceptions as reason:
             logging.warning("Could not open manual test dates report at %s: %s", url, reason)
             raise
@@ -180,7 +180,7 @@ class Birt(domain.MetricSource, beautifulsoup.BeautifulSoupOpener):
     def __test_design_metric(self, row_nr: int) -> int:
         """ Get a metric from a specific row in the test design report."""
         try:
-            test_design_report = self.soup(self.__test_design_url)
+            test_design_report = beautifulsoup.BeautifulSoupOpener().soup(self.__test_design_url)
         except url_opener.UrlOpener.url_open_exceptions as reason:
             logging.warning("Could not open %s: %s", self.__test_design_url, reason)
             return -1
