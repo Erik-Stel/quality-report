@@ -25,7 +25,6 @@ class UserStoriesNotReviewedTest(unittest.TestCase):
     def setUp(self):
         self.__birt = MagicMock()
         self.__subject = MagicMock()
-        # self.__subject.metric_source_id.return_value = "src_id"
         self.__project = domain.Project(metric_sources={metric_source.Backlog: self.__birt})
         self.__metric = metric.UserStoriesNotReviewed(subject=self.__subject, project=self.__project)
 

@@ -16,6 +16,7 @@ limitations under the License.
 
 
 from ... import domain
+from hqlib.typing import DateTime
 
 
 class Backlog(domain.MetricSource):
@@ -35,4 +36,40 @@ class Backlog(domain.MetricSource):
 
     def nr_user_stories_with_sufficient_ltcs(self) -> int:
         """ Return the number of user stories that have enough logical test cases. """
+        raise NotImplementedError
+
+    def reviewed_ltcs(self) -> int:
+        """ Return the number of reviewed logical test cases for the product. """
+        raise NotImplementedError
+
+    def nr_ltcs(self) -> int:
+        """ Return the number of logical test cases. """
+        raise NotImplementedError
+
+    def approved_ltcs(self) -> int:
+        """ Return the number of approved logical test casess. """
+        raise NotImplementedError
+
+    def nr_automated_ltcs(self) -> int:
+        """ Return the number of logical test cases that have been implemented as automated tests. """
+        raise NotImplementedError
+
+    def nr_ltcs_to_be_automated(self) -> int:
+        """ Return the number of logical test cases for the product that have to be automated. """
+        raise NotImplementedError
+
+    def nr_manual_ltcs(self, version: str = 'trunk') -> int:
+        """ Return the number of logical test cases for the product that are executed manually. """
+        raise NotImplementedError
+
+    def date_of_last_manual_test(self, version: str = 'trunk') -> DateTime:
+        """ Return the date when the product/version was last tested manually. """
+        raise NotImplementedError
+
+    def manual_test_execution_url(self, version: str = 'trunk') -> str:
+        """ Return the url for the Birt manual test execution report. """
+        raise NotImplementedError
+
+    def nr_manual_ltcs_too_old(self, version: str, target: int) -> int:
+        """ Return the number of manual logical test cases that have not been executed for target amount of days. """
         raise NotImplementedError

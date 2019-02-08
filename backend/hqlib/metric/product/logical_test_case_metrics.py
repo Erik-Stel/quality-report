@@ -19,14 +19,16 @@ import functools
 import datetime
 
 from hqlib.typing import MetricParameters, MetricValue
-from ..metric_source_mixin import BirtTestDesignMetric
 from ... import metric_source, utils
 from ...domain import LowerIsBetterMetric
+from ...metric_source.abstract.backlog import Backlog
 
 
-class LogicalTestCaseMetric(BirtTestDesignMetric, LowerIsBetterMetric):
+class LogicalTestCaseMetric(LowerIsBetterMetric):
     """ Base class for metrics measuring the quality of logical test cases. """
     unit = 'logische testgevallen'
+
+    metric_source_class = Backlog
 
     @functools.lru_cache(maxsize=1024)
     def value(self):
@@ -109,7 +111,7 @@ class ManualLogicalTestCases(LowerIsBetterMetric):
     no_manual_tests_template = 'Er zijn geen {unit}.'
     target_value = 21
     low_target_value = 28
-    metric_source_class = metric_source.Birt
+    metric_source_class = metric_source.Backlog
 
     @functools.lru_cache(maxsize=1024)
     def value(self):
