@@ -8,7 +8,7 @@ module.exports = function(app) {
     app.get('/api/fp/:id', fp.findOne);
  
     // Update a FP
-    app.post('/api/fp', fp.updateOrCreate);
+    app.post('/api/fp/:id', fp.updateOrCreate);
  
     // Delete a FP with Id
     app.delete('/api/fp/:id', fp.delete);

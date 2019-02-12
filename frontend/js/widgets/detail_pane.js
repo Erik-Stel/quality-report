@@ -150,10 +150,10 @@ class FalsePositivePanel extends React.Component {
                 return;
             }
             
-            fetch(self.props.false_positive_api_url + 'api/fp', {
+            fetch(self.props.false_positive_api_url + 'api/fp/' + self.props.warning_id, {
                 method: 'post',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ "id": self.props.warning_id, "reason": self.state.reason })
+                body: JSON.stringify({ "reason": self.state.reason })
             }).then(function (response) {
                 if (response.ok) {
                     alert('Gemarkeerd als false-positive. Binnen 20 minuten is dit zicthbaar in de metriek waarschuwing.');

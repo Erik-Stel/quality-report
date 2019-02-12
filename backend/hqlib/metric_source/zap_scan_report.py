@@ -98,7 +98,7 @@ class ZAPScanReport(domain.MetricSource):
                 url = location.find_next_sibling().get_text()
 
                 if not self.false_positive_api_url:
-                    warnings.append((name, url, 'Not supported'))
+                    warnings.append((name, url, 'Not available'))
                 else:
                     # Create a unique hash for this warning to use as an identifier in False-Positive suppression
                     property_hash = ''
