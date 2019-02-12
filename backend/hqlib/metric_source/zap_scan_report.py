@@ -44,7 +44,7 @@ class ZAPScanReport(domain.MetricSource):
         nr_alerts = 0
         for url in report_urls:
             try:
-                nr_alerts += len(self.__parse_warnings(self.__get_soup(url), risk_level, False))
+                nr_alerts += len(self.__parse_warnings(url, risk_level, False))
             except url_opener.UrlOpener.url_open_exceptions:
                 return -1
             except IndexError as reason:
@@ -58,7 +58,7 @@ class ZAPScanReport(domain.MetricSource):
         warnings = []
         for url in report_urls:
             try:
-                warnings += self.__parse_warnings(self.__get_soup(url), risk_level, True)
+                warnings += self.__parse_warnings(url, risk_level, True)
             except url_opener.UrlOpener.url_open_exceptions:
                 return []
             except IndexError as reason:
@@ -85,9 +85,10 @@ class ZAPScanReport(domain.MetricSource):
         self.false_positive_api_url = ''
         return ''
 
-    def __parse_warnings(self, soup, risk_level: str, include_false_positives: bool) -> list:
+    def __parse_warnings(self, report_url: str, risk_level: str, include_false_positives: bool) -> list:
         """ Get all the warnings from the HTML soup. """
         warnings = []
+        soup = self.__get_soup(report_url)
         headers = soup.find_all('tr', attrs={"class": "risk-{level}".format(level=risk_level)})
         for header in headers:
             table = header.findParent('table')
@@ -95,10 +96,10 @@ class ZAPScanReport(domain.MetricSource):
 
             locations = table.find_all('td', attrs={"class": "indent1"})
             for location in locations:
-                url = location.find_next_sibling().get_text()
+                location_url = location.find_next_sibling().get_text()
 
                 if not self.false_positive_api_url:
-                    warnings.append((name, url, 'Not available'))
+                    warnings.append((name, location_url, 'Not available'))
                 else:
                     # Create a unique hash for this warning to use as an identifier in False-Positive suppression
                     property_hash = ''
@@ -111,7 +112,13 @@ class ZAPScanReport(domain.MetricSource):
                         else:
                             break
 
-                    warning_id_hash_value = 'ZAP_{}_{}_{}'.format(name, url, property_hash).encode('utf-8')
+                    warning_id_hash_value = '{}_{}_{}_{}_{}' \
+                                            .format(self.metric_source_name,
+                                                    report_url,
+                                                    name,
+                                                    location_url,
+                                                    property_hash) \
+                                            .encode('utf-8')
 
                     md5_hash = hashlib.md5()
                     md5_hash.update(warning_id_hash_value)
@@ -123,10 +130,10 @@ class ZAPScanReport(domain.MetricSource):
                         false_positive_reason = self.false_positives_list[warning_id]["reason"]
 
                     if include_false_positives or not is_false_positive:
-                        warnings.append((name, url, (warning_id,
-                                                     is_false_positive,
-                                                     false_positive_reason,
-                                                     self.false_positive_api_url)))
+                        warnings.append((name, location_url, (warning_id,
+                                                              is_false_positive,
+                                                              false_positive_reason,
+                                                              self.false_positive_api_url)))
 
         if not warnings:
             logging.warning("Couldn't find any entries with %s risk level.", risk_level)
