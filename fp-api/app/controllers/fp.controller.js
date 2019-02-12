@@ -7,6 +7,9 @@ loadData = function () {
         if (err) {
             console.log(err);
         } else {
+            if(data === '') {
+                data = '{}';
+            }
             falsepositives = JSON.parse(data);
         }
     });

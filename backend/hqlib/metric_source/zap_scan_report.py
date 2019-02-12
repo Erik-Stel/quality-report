@@ -111,7 +111,7 @@ class ZAPScanReport(domain.MetricSource):
                         else:
                             break
 
-                    warning_id_hash_value = '{}_{}_{}'.format(name, url, property_hash).encode('utf-8')
+                    warning_id_hash_value = 'ZAP_{}_{}_{}'.format(name, url, property_hash).encode('utf-8')
 
                     md5_hash = hashlib.md5()
                     md5_hash.update(warning_id_hash_value)
