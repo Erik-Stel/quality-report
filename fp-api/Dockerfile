@@ -7,8 +7,7 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
-RUN rm data.json 
-RUN rm Dockerfile
+RUN rm data/data.json
 
 EXPOSE 3000
 CMD [ "node", "app.js" ]

@@ -1,7 +1,7 @@
 var fs = require('fs');
 
 var falsepositives = {}
-var datafile = 'data.json';
+var datafile = 'data/data.json';
 
 loadData = function () {
     fs.readFile(datafile, 'utf8', function readFileCallback(err, data) {
