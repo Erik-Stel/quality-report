@@ -67,7 +67,7 @@ class Backlog(domain.MetricSource):
         raise NotImplementedError
 
     def manual_test_execution_url(self, version: str = 'trunk') -> str:
-        """ Return the url for the Birt manual test execution report. """
+        """ Return the url for the manual test execution report. """
         raise NotImplementedError
 
     def nr_manual_ltcs_too_old(self, version: str, target: int) -> int:
