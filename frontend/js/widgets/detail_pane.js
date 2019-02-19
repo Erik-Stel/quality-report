@@ -127,18 +127,12 @@ class FalsePositivePanel extends React.Component {
 
     setFalsePositive = () => {
         var self = this;
-        fpRemoveSuccessAlert('False-positive markering verwijderd. Binnen 20 minuten is dit zicthbaar in de metriek waarschuwing.');
-        fpAddSuccessAlert('Gemarkeerd als false-positive. Binnen 20 minuten is dit zicthbaar in de metriek waarschuwing.');
-        fpErrorAlert('Fout.');
-        fpEmptyReasonAlert('Voer een reden in.');
-
         if (self.state.isFalsePositive === true) {
             fetch(self.props.false_positive_api_url + 'api/fp/' + self.props.warning_id, {
                 method: 'delete'
             }).then(function (response) {
                 if (response.ok) {
-                    var alert = fpRemoveSuccessAlert;
-                    alert();
+                    alert('False-positive markering verwijderd. Binnen 20 minuten is dit zicthbaar in de metriek waarschuwing.'); // eslint-disable-line no-alert
 
                     self.setState({
                         isFalsePositive: false,
@@ -146,15 +140,13 @@ class FalsePositivePanel extends React.Component {
                         reason: ''
                     });
                 } else {
-                    var alert = fpErrorAlert;
-                    alert();
+                    alert('Fout.'); // eslint-disable-line no-alert
                 }
             });
         }
         else {
             if(self.state.reason === "") {
-                var alert = fpEmptyReasonAlert;
-                alert();
+                alert('Voer een reden in.'); // eslint-disable-line no-alert
                 return;
             }
             
@@ -164,15 +156,13 @@ class FalsePositivePanel extends React.Component {
                 body: JSON.stringify({ "reason": self.state.reason })
             }).then(function (response) {
                 if (response.ok) {
-                    var alert = fpAddSuccessAlert;
-                    alert();
+                    alert('Gemarkeerd als false-positive. Binnen 20 minuten is dit zicthbaar in de metriek waarschuwing.');
                     self.setState({
                         isFalsePositive: true,
                         label: 'Tonen'
                     });
                 } else {
-                    var alert = fpErrorAlert;
-                    alert();
+                    alert('Fout.'); // eslint-disable-line no-alert
                 }
             });
         }
