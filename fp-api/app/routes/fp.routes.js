@@ -1,6 +1,6 @@
-module.exports = function(app) {
-    var fp = require('../controllers/fp.controller.js');
- 
+var fp = require('../controllers/fp.controller.js');
+
+module.exports = function(app) { 
     // Retrieve all FP's
     app.get('/api/fp', fp.findAll);
  
