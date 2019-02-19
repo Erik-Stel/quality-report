@@ -149,8 +149,12 @@ class ZAPScanReportTest(unittest.TestCase):
         """ Test that data about warnings are extracted correctly. """
         mock_url_read.return_value = ZAP_REPORT
         result = self.__report.get_warnings_info('high', 'url')
-        self.assertEqual([("Anti CSRF Tokens Scanner", "https://test.org/gebruikersgegevens/details.jsf", "Not available"),
-                          ("Anti CSRF Tokens Scanner", "https://test.org/scripts/jquery-3.2.1.min.js", "Not available")], result)
+        self.assertEqual([("Anti CSRF Tokens Scanner",
+                           "https://test.org/gebruikersgegevens/details.jsf",
+                           "Not available"),
+                          ("Anti CSRF Tokens Scanner",
+                           "https://test.org/scripts/jquery-3.2.1.min.js",
+                           "Not available")], result)
 
     def test_get_warnings_info_http_error(self, mock_url_read):
         """ Test that data about warnings are empty when http error happens. """

@@ -104,7 +104,7 @@ class FalsePositivePanel extends React.Component {
 
     // If changes were made in between a HQ build
     componentDidUpdate(prevProps) {
-        if(prevProps.false_positive_list != this.props.false_positive_list) {
+        if(prevProps.false_positive_list !== this.props.false_positive_list) {
             if(this.props.false_positive_list) {
                 var item = this.props.false_positive_list[this.props.warning_id];
                 if(item) {
@@ -127,26 +127,34 @@ class FalsePositivePanel extends React.Component {
 
     setFalsePositive = () => {
         var self = this;
+        fpRemoveSuccessAlert('False-positive markering verwijderd. Binnen 20 minuten is dit zicthbaar in de metriek waarschuwing.');
+        fpAddSuccessAlert('Gemarkeerd als false-positive. Binnen 20 minuten is dit zicthbaar in de metriek waarschuwing.');
+        fpErrorAlert('Fout.');
+        fpEmptyReasonAlert('Voer een reden in.');
 
         if (self.state.isFalsePositive === true) {
             fetch(self.props.false_positive_api_url + 'api/fp/' + self.props.warning_id, {
                 method: 'delete'
             }).then(function (response) {
                 if (response.ok) {
-                    alert('False-positive markering verwijderd. Binnen 20 minuten is dit zicthbaar in de metriek waarschuwing.');
+                    var alert = fpRemoveSuccessAlert;
+                    alert();
+
                     self.setState({
                         isFalsePositive: false,
                         label: 'Verbergen',
                         reason: ''
                     });
                 } else {
-                    alert('Fout.');
+                    var alert = fpErrorAlert;
+                    alert();
                 }
             });
         }
         else {
             if(self.state.reason === "") {
-                alert("Voer een reden in.");
+                var alert = fpEmptyReasonAlert;
+                alert();
                 return;
             }
             
@@ -156,13 +164,15 @@ class FalsePositivePanel extends React.Component {
                 body: JSON.stringify({ "reason": self.state.reason })
             }).then(function (response) {
                 if (response.ok) {
-                    alert('Gemarkeerd als false-positive. Binnen 20 minuten is dit zicthbaar in de metriek waarschuwing.');
+                    var alert = fpAddSuccessAlert;
+                    alert();
                     self.setState({
                         isFalsePositive: true,
                         label: 'Tonen'
                     });
                 } else {
-                    alert('Fout.');
+                    var alert = fpErrorAlert;
+                    alert();
                 }
             });
         }
@@ -177,9 +187,9 @@ class FalsePositivePanel extends React.Component {
     render() {
         return (
             <div className="btn-group" role="group" aria-label="Action Panel">
-                <input type="text" className="form-control" value={this.state.reason} onChange={this.handleReasonChange} />
+                <input type="text" className="form-control" value={this.state.reason} placeholder="Voer een reden in." aria-label="Voer een reden in." onChange={this.handleReasonChange} />
                 &nbsp;
-                <button type="button" id={this.props.warning_id} placeholder="Voer een reden in voor het verbergen" className="btn btn-default" data-toggle="tooltip" data-placement="right"
+                <button type="button" id={this.props.warning_id} className="btn btn-default" data-toggle="tooltip" data-placement="right"
                     title="(De)Markeer als false-positive." onClick={this.setFalsePositive}>
                     {this.state.label}
                 </button>
@@ -283,7 +293,7 @@ class TablePanel extends React.Component {
     formatCell(cell_content) {
         if (cell_content) {
             if (Array.isArray(cell_content)) {
-                if (cell_content.length == 4 && cell_content[0].length == 32) {
+                if (cell_content.length === 4 && cell_content[0].length === 32) {
                     this.fetchFalsePositiveList(cell_content[3]);
                     return <FalsePositivePanel false_positive_api_url={cell_content[3]} false_positive_list={this.state.false_positive_list} warning_id={cell_content[0]} false_positive={cell_content[1]} false_positive_reason={cell_content[2]} />
                 }
