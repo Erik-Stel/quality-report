@@ -100,6 +100,12 @@ class ViolationsByType(Requirement):
     _metric_classes = (metric.MaintainabilityBugs, metric.Vulnerabilities, metric.CodeSmells)
 
 
+class Accessibility(Requirement):
+    """ Require accessibility violations of programming rules to be tracked. """
+    _name = 'Violations by severity'
+    _metric_classes = (metric.AccessibilityViolations,)
+
+
 class PerformanceLoad(Requirement):
     """ Require a performance load test. """
     _name = 'Performance load'
