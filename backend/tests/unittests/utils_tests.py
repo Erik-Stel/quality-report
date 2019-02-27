@@ -239,6 +239,10 @@ class ParseUSDateTimeTest(unittest.TestCase):
         """ Test that parsing an invalid string throws an exception. """
         self.assertRaises(ValueError, utils.parse_us_date_time, 'Apr -1')
 
+    def test_extended_format(self):
+        """ Test that parsing an extended format string (ie with additional comma) is parsed correctly. """
+        self.assertEqual(datetime.datetime(2019, 2, 27, 15, 29, 0), utils.parse_us_date_time('Feb 27, 2019, 3:29:00 PM'))
+
 
 class ParseISODateTest(unittest.TestCase):
     """ Unit tests for the parse ISO date method. """
